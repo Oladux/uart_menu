@@ -9,11 +9,22 @@
 #define INC_SHELL_H_
 #include "main.h"
 
+typedef uint8_t (*func_type)(void* p);
+
 typedef enum {
 	COMMAND_TYPE,
-	SUBMENU_TYPE
+	CHILD_MENU_TYPE
 } item_type;
 
+typedef enum{
+	NONE_EVENT,
+	ENTER_EVENT,
+	ESCAPE_EVENT,
+	NEXT_EVENT,
+	PREV_EVENT,
+//	INC_EVENT,
+//	DEC_EVENT
+} event_type;
 
 #define MENU_COMMAND(id, name, parent, prev, next , func) \
 	extern menu_item parent; 	\
