@@ -7,33 +7,15 @@
 #include "shell.h"
 extern UART_HandleTypeDef huart2;
 
-typedef const struct menu_item{
-	uint8_t type;
-	struct menu_item *prev;
-	struct menu_item *next;
-	struct menu_item *parent;
-	struct menu_item *child;
-	func_type  func;
-	const char name[];
-} menu_item;
 
-uint8_t test1(uint8_t a){
-	return a;
-}
-uint8_t test2(uint8_t a){
-	return a;
-}
-uint8_t test3(uint8_t a){
-	return a;
-}
-menu_item NONE = {0};
-menu_item *first_menu;
-menu_item *current_menu=&NONE;
+menu_item_type NONE = {0};
+menu_item_type* first_menu;
+menu_item_type* current_menu=&NONE;
 
-MENU_COMMAND(m1,"TEST1",NONE,NONE,m2,test1);
-MENU_COMMAND(m2,"TEST2",NONE,m1,m3,test2);
-MENU_COMMAND(m3,"TEST3",NONE,m2,NONE,test3);
-void init_menu(menu_item* menu)
+
+
+
+void init_menu(menu_item_type* menu)
 {
 	current_menu=menu;
 	first_menu=&NONE;
@@ -78,15 +60,41 @@ uint8_t menu_action(event_type ev_type){
 
 }
 void print_menu(){
-	menu_item* buf_menu=&current_menu;
+	menu_item_type* buf_menu=current_menu;
 
 	while((buf_menu->prev)!=&NONE){
 		buf_menu=buf_menu->prev;
 	}
 
 	while(buf_menu->next!=&NONE){
-			HAL_UART_Transmit(&huart2, (uint8_t*)buf_menu->name, 5, 100);
+			print_menu_string(buf_menu->name);
+			buf_menu=buf_menu->next;
 	}
+	print_menu_string(buf_menu->name);
 
 }
+
+void print_menu_string(char* string){
+	char str[2];
+	static uint8_t menu_index=1;
+	snprintf(str,3,"%d)",menu_index);
+	HAL_UART_Transmit(&huart2, (uint8_t*)str, 2, 100);
+	HAL_UART_Transmit(&huart2, (uint8_t*)string, sizeof(string)+1, 100);
+	HAL_UART_Transmit(&huart2, (uint8_t*)"\n", 1, 100);
+	menu_index++;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
