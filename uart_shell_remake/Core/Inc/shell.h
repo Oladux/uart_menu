@@ -8,11 +8,8 @@
 #ifndef INC_SHELL_H_
 #define INC_SHELL_H_
 #include "main.h"
-#include <stdio.h>
 
 typedef uint8_t (*func_type)(void* p);
-
-
 
 typedef enum {
 	COMMAND_TYPE,
@@ -28,6 +25,10 @@ typedef enum{
 //	INC_EVENT,
 //	DEC_EVENT
 } event_type;
+#define LEFT 27
+#define UP 28
+#define RIGHT 29
+#define DOWN 30
 
 typedef const struct menu_item{
 	uint8_t type;
@@ -60,5 +61,5 @@ void init_menu(menu_item_type*);
 uint8_t menu_action(event_type);
 void print_menu();
 void print_menu_string();
-
+event_type input_type();
 #endif /* INC_SHELL_H_ */
