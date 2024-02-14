@@ -25,10 +25,10 @@ typedef enum{
 //	INC_EVENT,
 //	DEC_EVENT
 } event_type;
-#define LEFT 27
-#define UP 28
+#define LEFT 28
 #define RIGHT 29
-#define DOWN 30
+#define UP 30
+#define DOWN 31
 
 typedef const struct menu_item{
 	uint8_t type;
@@ -46,15 +46,15 @@ extern  menu_item_type NONE;
 
 #define MENU_COMMAND(_id, _name, _parent, _prev, _next , _func) \
 	extern menu_item_type _parent; 	\
-	extern menu_item_type _prev; 	 \
-	extern menu_item_type _next;   \
+	extern menu_item_type _prev; 	\
+	extern menu_item_type _next;    \
 	menu_item_type _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*) _func, .name = _name}
 
 #define SUB_MENU(id, name, parent, prev, next , sub) \
 	extern menu_item parent; \
 	extern menu_item prev; 	 \
 	extern menu_item next;   \
-	extern menu_item sub;   \
+	extern menu_item sub;    \
 	menu_item id = {.type = SUBMENU_TYPE, .prev=&prev, .next=&next, .func=NULL, .parent=parent, .sub=&sub, .name=name}
 
 void init_menu(menu_item_type*);
