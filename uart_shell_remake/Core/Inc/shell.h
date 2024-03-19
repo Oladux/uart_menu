@@ -9,11 +9,12 @@
 #define INC_SHELL_H_
 #include "main.h"
 
+
 typedef uint8_t (*func_type)(void* p);
 
 typedef enum {
 	COMMAND_TYPE,
-	CHILD_MENU_TYPE
+	OPTION_TYPE
 } item_type;
 
 typedef enum{
@@ -50,16 +51,18 @@ extern  menu_item_type NONE;
 	extern menu_item_type _next;    \
 	menu_item_type _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*) _func, .name = _name}
 
-#define SUB_MENU(id, name, parent, prev, next , sub) \
-	extern menu_item parent; \
-	extern menu_item prev; 	 \
-	extern menu_item next;   \
-	extern menu_item sub;    \
-	menu_item id = {.type = SUBMENU_TYPE, .prev=&prev, .next=&next, .func=NULL, .parent=parent, .sub=&sub, .name=name}
+#define MENU_OPTION(_id, _name, _parent, _child, _prev, _next) \
+	extern menu_item_type _parent; \
+	extern menu_item_type _prev; 	 \
+	extern menu_item_type _next;   \
+	extern menu_item_type _child;   \
+	menu_item_type _id = {.type = OPTION_TYPE, .prev=(void*)&_prev, .next=(void*)&_next, .func=NULL, .parent=(void*)&_parent, .child=(void*)&_child, .name=_name}
 
 void init_menu(menu_item_type*);
-uint8_t menu_action(event_type);
 void print_menu();
 void print_menu_string();
+void reload_menu();
+uint8_t menu_action(event_type);
 event_type input_type();
+uint8_t index_menu();
 #endif /* INC_SHELL_H_ */

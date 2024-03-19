@@ -7,3 +7,4 @@
 
 #include "shell.h"
 
+char welcome_message[]="Welcome to UART shell. Use arrows to navigate menu";
