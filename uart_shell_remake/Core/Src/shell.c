@@ -8,19 +8,27 @@
 extern UART_HandleTypeDef huart2;
 
 uint8_t menu_select_index=1;
+uint8_t i=0;
 char input_command[1]={" "};
+char* welcome_message="Welcome to UART menu. "
+					  "Use arrows to navigate.\n\n";
+
 
 menu_item_type NONE = {0};
 menu_item_type* first_menu;
 menu_item_type* current_menu=&NONE;
 
+uint8_t command_recieve(){
+	char input_command[1]={" "};
+	HAL_UART_Receive(&huart2, (uint8_t*)input_command, 1, HAL_MAX_DELAY);
+	uint8_t command=(int)(input_command[0]);
+	return	command;
+}
+
 event_type input_type(){
 	event_type event=0;
-	HAL_UART_Receive(&huart2, (uint8_t*)input_command, 1, HAL_MAX_DELAY);
-
-	int operation=(int)(input_command[0]);
-
-	switch (operation) {
+	uint8_t command=command_recieve();
+	switch (command) {
 		case LEFT:
 			event = ESCAPE_EVENT;
 			break;
@@ -43,6 +51,7 @@ void init_menu(menu_item_type* menu)
 {
 	current_menu=menu;
 	first_menu=&NONE;
+	HAL_UART_Transmit(&huart2,(uint8_t*)welcome_message, 47, 100);
 	print_menu();
 }
 
@@ -116,8 +125,20 @@ void print_menu(){
 			menu_item_index++;
 	}
 	print_menu_string(buf_menu->name);
+	HAL_UART_Transmit(&huart2, (uint8_t*)"--------------------", 20, 100);
 	HAL_UART_Transmit(&huart2, (uint8_t*)"\n", 1, 100);
 	menu_item_index=1;
+}
+
+void print_menu_string(char* string){
+	char str[2];
+	snprintf(str,3,"%d)",menu_item_index);
+	HAL_UART_Transmit(&huart2, (uint8_t*)str, 2, 100);
+	HAL_UART_Transmit(&huart2, (uint8_t*)string, sizeof(string)+1, 100);
+	if(menu_select_index==menu_item_index){
+		HAL_UART_Transmit(&huart2, (uint8_t*)"*", 1, 100);
+	}
+	HAL_UART_Transmit(&huart2, (uint8_t*)"\n", 1, 100);
 }
 
 uint8_t index_menu(){
@@ -135,21 +156,6 @@ void reload_menu(){
 		current_menu=current_menu->prev;
 	}
 }
-void print_menu_string(char* string){
-	char str[2];
-	snprintf(str,3,"%d)",menu_item_index);
-	HAL_UART_Transmit(&huart2, (uint8_t*)str, 2, 100);
-	HAL_UART_Transmit(&huart2, (uint8_t*)string, sizeof(string)+1, 100);
-	if(menu_select_index==menu_item_index){
-		HAL_UART_Transmit(&huart2, (uint8_t*)"*", 1, 100);
-	}
-	HAL_UART_Transmit(&huart2, (uint8_t*)"\n", 1, 100);
-}
-
-
-
-
-
 
 
 

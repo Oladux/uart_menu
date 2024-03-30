@@ -10,6 +10,7 @@
 #include "main.h"
 
 
+
 typedef uint8_t (*func_type)(void* p);
 
 typedef enum {
@@ -41,6 +42,14 @@ typedef const struct menu_item{
 	const char name[];
 } menu_item_type;
 
+typedef const struct menu_func{
+	func_type* func;
+	uint8_t flag;
+} menu_func_type;
+
+#define MENU_FUNC(_id, _func, _flag) \
+	menu_func_type _id = {.func=(void*)&_func, .flag=_flag}
+
 extern  menu_item_type* menu_first;
 extern  menu_item_type* menu_current;
 extern  menu_item_type NONE;
@@ -49,7 +58,7 @@ extern  menu_item_type NONE;
 	extern menu_item_type _parent; 	\
 	extern menu_item_type _prev; 	\
 	extern menu_item_type _next;    \
-	menu_item_type _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*) _func, .name = _name}
+	menu_item_type _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*)&_func, .name = _name}
 
 #define MENU_OPTION(_id, _name, _parent, _child, _prev, _next) \
 	extern menu_item_type _parent; \
@@ -62,7 +71,13 @@ void init_menu(menu_item_type*);
 void print_menu();
 void print_menu_string();
 void reload_menu();
+void GPIO_handler();
+void test2(uint8_t);
+
 uint8_t menu_action(event_type);
-event_type input_type();
+uint8_t flag_handler(uint16_t);
 uint8_t index_menu();
+uint8_t command_recieve();
+
+event_type input_type();
 #endif /* INC_SHELL_H_ */
