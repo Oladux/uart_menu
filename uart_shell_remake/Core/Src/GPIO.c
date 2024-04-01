@@ -4,7 +4,7 @@
  *  Created on: Mar 30, 2024
  *      Author: Stepan
  */
-#include "shell.h"
+#include <menu.h>
 #include "GPIO.h"
 
 GPIO_TypeDef* const GPIO_NONE= {0};

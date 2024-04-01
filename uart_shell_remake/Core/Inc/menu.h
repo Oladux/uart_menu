@@ -5,8 +5,8 @@
  *      Author: Stepan
  */
 
-#ifndef INC_SHELL_H_
-#define INC_SHELL_H_
+#ifndef INC_MENU_H_
+#define INC_MENU_H_
 #include "main.h"
 #include  "math.h"
 
@@ -92,4 +92,4 @@ uint8_t strlen(const char*);
 event_type input_type();
 
 void GPIO();
-#endif /* INC_SHELL_H_ */
+#endif /* INC_MENU_H_ */

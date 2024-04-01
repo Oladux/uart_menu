@@ -4,7 +4,7 @@
  *  Created on: Jan 30, 2024
  *      Author: Stepan
  */
-#include "shell.h"
+#include <menu.h>
 
 
 /* Structs templates
@@ -20,7 +20,7 @@ MENU_COMMAND(mo12,"TEST5", mo2, NONE,NONE,NONE);
 MENU_OPTION(mo13,"TEST6",mo3,NONE,NONE,NONE);
 
 // The entry point to the program
-void shell_app(){
+void menu_app(){
 	init_menu(&mo1);
 	while(1){
 		menu_handler(input_type());

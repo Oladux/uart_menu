@@ -4,7 +4,7 @@
  *  Created on: Jan 30, 2024
  *      Author: Stepan
  */
-#include "shell.h"
+#include <menu.h>
 
 extern UART_HandleTypeDef huart2;
 
