@@ -10,10 +10,16 @@
 #endif /* INC_GPIO_H_ */
 
 //Functions prototypes
-void GPIO_handler();
 
 void GPIO_port_convert(uint8_t);
 void GPIO_pin_convert(uint8_t);
 
 void GPIO_pin_input();
 void GPIO_port_input();
+
+void GPIO_pin_select();
+void GPIO_input(uint8_t);
+
+enum GPIO_INPUT_MODE{
+	PIN_SELECT,
+};

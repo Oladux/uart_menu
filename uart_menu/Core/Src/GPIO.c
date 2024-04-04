@@ -7,41 +7,49 @@
 #include <menu.h>
 #include "GPIO.h"
 
+extern Menu_Item_t MGPIO1;
+
 GPIO_TypeDef* const GPIO_NONE= {0};
 GPIO_TypeDef* current_GPIO = GPIO_NONE;
 
-uint32_t pin_input;
-uint16_t port_input;
+uint32_t pin_input=0;
+uint16_t port_input=0;
 
 /* The general GPIO function called from the menu */
 void GPIO(){
-	GPIO_handler();
+	create_menu(&MGPIO1);
 }
 
 /* The GPIO handler that calls all other functions */
-void GPIO_handler(){
-		GPIO_port_input();
-		GPIO_pin_input();
-	    current_GPIO->BSRR=pin_input;
-	    HAL_GPIO_WritePin(current_GPIO, current_GPIO->BSRR,1);
+void GPIO_pin_select(){
+	GPIO_input(PIN_SELECT);
 }
-
-/* User input of GPIO pin in HAL format */
+/* User input of GPIO in HAL format */
+void GPIO_input(uint8_t mode){
+	switch (mode) {
+		case 0:
+			GPIO_pin_input();
+			GPIO_port_input();
+			break;
+		default:
+			break;
+	}
+}
 void GPIO_pin_input(){
-	print_menu_string("Input GPIO pin:\n");
+	print_input_message("Input GPIO pin");
 	uint8_t command = command_recieve();
 	GPIO_pin_convert(command);
-	if ((pin_input <= 15)&&((pin_input > 0))){
+	if ((pin_input <= 15) && ((pin_input > 0))){
 		pin_input=pow(2,pin_input);
 	}
 }
 
-/*User input of GPIO port in HAL format */
 void GPIO_port_input(){
-	print_menu_string("Input GPIO port:\n");
+	print_input_message("Input GPIO port");
 	uint8_t command = command_recieve();
 	GPIO_port_convert(command);
 }
+
 
 /*Conversion of input_port from ASCII to int */
 void GPIO_port_convert(uint8_t input){
@@ -125,5 +133,6 @@ void GPIO_pin_convert(uint8_t input){
 			break;
 	}
 }
+
 
 

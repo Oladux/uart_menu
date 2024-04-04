@@ -8,7 +8,8 @@
 #ifndef INC_MENU_H_
 #define INC_MENU_H_
 #include "main.h"
-#include  "math.h"
+#include "math.h"
+
 
 /*The type of functions called from the menu */
 typedef uint8_t (*func_type)(void* p);
@@ -16,7 +17,17 @@ typedef uint8_t (*func_type)(void* p);
 typedef enum {
 	COMMAND_TYPE,
 	OPTION_TYPE
-} item_type;
+} Item_Type_t;
+
+typedef enum{
+	NAVIGATION_MENU_STATE,
+	INPUT_MENU_STATE
+} Menu_State_t;
+
+typedef enum{
+	NAVIGATION_MENU_TYPE,
+	GPIO_MENU_TYPE
+} Menu_Type_t;
 
 typedef enum{
 	NONE_EVENT,
@@ -26,7 +37,7 @@ typedef enum{
 	PREV_EVENT,
 //	INC_EVENT,
 //	DEC_EVENT
-} event_type;
+} Event_Type_t;
 
 enum ASCII_TO_INT{
 	A = 65,
@@ -50,46 +61,45 @@ typedef const struct menu_item{
 	struct menu_item *child;
 	func_type  func;
 	const char name[];
-} menu_item_type;
+} Menu_Item_t;
 
-typedef const struct menu_func{
-	func_type* func;
-	uint8_t flag;
-} menu_func_type;
 
-extern  menu_item_type* menu_first;
-extern  menu_item_type* menu_current;
-extern  menu_item_type NONE;
+extern  Menu_Item_t* Menu_first;
+extern  Menu_Item_t* Current_menu;
+extern  Menu_Item_t  NONE;
+extern  Menu_State_t    Menu_state;
 
 /* A macro for creating a menu item containing a function */
 #define MENU_COMMAND(_id, _name, _parent, _prev, _next , _func) \
-	extern menu_item_type _parent; 	\
-	extern menu_item_type _prev; 	\
-	extern menu_item_type _next;    \
-	menu_item_type _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*)&_func, .name = _name}
+	extern Menu_Item_t _parent; 	\
+	extern Menu_Item_t _prev; 	\
+	extern Menu_Item_t _next;    \
+	Menu_Item_t _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*)&_func, .name = _name}
 
 /* A macro for creating a menu item that does not contain a function*/
 #define MENU_OPTION(_id, _name, _parent, _child, _prev, _next) \
-	extern menu_item_type _parent; \
-	extern menu_item_type _prev; 	 \
-	extern menu_item_type _next;   \
-	extern menu_item_type _child;   \
-	menu_item_type _id = {.type = OPTION_TYPE, .prev=(void*)&_prev, .next=(void*)&_next, .func=NULL, .parent=(void*)&_parent, .child=(void*)&_child, .name=_name}
+	extern Menu_Item_t _parent; \
+	extern Menu_Item_t _prev; 	 \
+	extern Menu_Item_t _next;   \
+	extern Menu_Item_t _child;   \
+	Menu_Item_t _id = {.type = OPTION_TYPE, .prev=(void*)&_prev, .next=(void*)&_next, .func=NULL, .parent=(void*)&_parent, .child=(void*)&_child, .name=_name}
 
 //Functions prototypes
-void init_menu(menu_item_type*);
+void create_menu(Menu_Item_t*);
 void print_menu();
 void print_menu_string();
+void print_input_message(const char*);
 void reload_menu();
 
 
-uint8_t menu_handler(event_type);
+uint8_t menu_handler(Event_Type_t);
 uint8_t flag_handler(uint16_t);
 uint8_t index_menu();
 uint8_t command_recieve();
-uint8_t strlen(const char*);
+uint8_t lenstr(const char*);
 
-event_type input_type();
+Event_Type_t menu_input_type();
 
 void GPIO();
+void GPIO_pin_select();
 #endif /* INC_MENU_H_ */
