@@ -12,14 +12,17 @@
 //Functions prototypes
 
 void GPIO_port_convert(uint8_t);
-void GPIO_pin_convert(uint8_t);
+uint8_t ASCII_to_int(uint8_t);
 
 void GPIO_pin_input();
 void GPIO_port_input();
 
-void GPIO_pin_select();
 void GPIO_input(uint8_t);
+void GPIO_pin_select();
+void GPIO_pin_write();
+void GPIO_pin_write_input();
 
 enum GPIO_INPUT_MODE{
-	PIN_SELECT,
+	GPIO_PIN_SELECT,
+	GPIO_PIN_WRITE,
 };

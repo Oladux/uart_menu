@@ -8,6 +8,7 @@
 
 extern Menu_Item_t MNav1;
 extern Menu_Item_t MGPIO1;
+
 // Variables
 char input_command[1]={" "};
 char* welcome_message="Welcome to UART menu. "
@@ -132,6 +133,7 @@ uint8_t lenstr(const char* str)
     for (s = str; *s; ++s);
     return(s - str);
 }
+
 
 
 

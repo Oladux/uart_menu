@@ -90,7 +90,7 @@ void print_menu();
 void print_menu_string();
 void print_input_message(const char*);
 void reload_menu();
-
+void debug_output(uint8_t,uint32_t);
 
 uint8_t menu_handler(Event_Type_t);
 uint8_t flag_handler(uint16_t);
@@ -102,4 +102,5 @@ Event_Type_t menu_input_type();
 
 void GPIO();
 void GPIO_pin_select();
+void GPIO_pin_write();
 #endif /* INC_MENU_H_ */
