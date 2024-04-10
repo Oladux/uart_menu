@@ -9,6 +9,5 @@
 #define INC_MENU_IO_H_
 #include "menu.h"
 
-void debug_output(uint8_t,uint32_t);
-void debug_transmit(uint32_t);
+void print_status();
 #endif /* INC_MENU_IO_H_ */

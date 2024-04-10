@@ -18,12 +18,12 @@ typedef enum {
 	COMMAND_TYPE,
 	OPTION_TYPE
 } Item_Type_t;
-
+/*
 typedef enum{
 	NAVIGATION_MENU_STATE,
 	INPUT_MENU_STATE
 } Menu_State_t;
-
+*/
 typedef enum{
 	NAVIGATION_MENU_TYPE,
 	GPIO_MENU_TYPE
@@ -40,12 +40,12 @@ typedef enum{
 } Event_Type_t;
 
 enum ASCII_TO_INT{
-	A = 65,
-	B = 66,
-	C = 67,
-	D = 68,
-	E = 69,
-	H = 72,
+	A = 17,
+	B = 18,
+	C = 19,
+	D = 20,
+	E = 21,
+	H = 54,
 
 	LEFT = 28,
 	RIGHT = 29,
@@ -67,7 +67,7 @@ typedef const struct menu_item{
 extern  Menu_Item_t* Menu_first;
 extern  Menu_Item_t* Current_menu;
 extern  Menu_Item_t  NONE;
-extern  Menu_State_t    Menu_state;
+extern  Menu_Type_t Menu_type;
 
 /* A macro for creating a menu item containing a function */
 #define MENU_COMMAND(_id, _name, _parent, _prev, _next , _func) \
@@ -86,11 +86,11 @@ extern  Menu_State_t    Menu_state;
 
 //Functions prototypes
 void create_menu(Menu_Item_t*);
-void print_menu();
+void Print_menu();
 void print_menu_string();
 void print_input_message(const char*);
 void reload_menu();
-void debug_output(uint8_t,uint32_t);
+void debug_output(uint32_t);
 
 uint8_t menu_handler(Event_Type_t);
 uint8_t flag_handler(uint16_t);

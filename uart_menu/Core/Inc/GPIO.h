@@ -9,10 +9,11 @@
 #define INC_GPIO_H_
 #endif /* INC_GPIO_H_ */
 
+#define ASCII_TO_INT(ASCII_value) ASCII_value-48
 //Functions prototypes
 
 void GPIO_port_convert(uint8_t);
-uint8_t ASCII_to_int(uint8_t);
+//uint8_t ASCII_to_int(uint8_t);
 
 void GPIO_pin_input();
 void GPIO_port_input();
@@ -26,3 +27,4 @@ enum GPIO_INPUT_MODE{
 	GPIO_PIN_SELECT,
 	GPIO_PIN_WRITE,
 };
+

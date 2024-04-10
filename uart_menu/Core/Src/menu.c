@@ -11,22 +11,19 @@ extern Menu_Item_t MGPIO1;
 
 // Variables
 char input_command[1]={" "};
-char* welcome_message="Welcome to UART menu. "
-					  "Use arrows to navigate.\n\n";
 
 Menu_Item_t NONE = {0};
 Menu_Item_t* first_menu;
 Menu_Item_t* Current_menu = &NONE;
 
 uint8_t menu_select_index = 1;
-Menu_State_t Menu_state = NAVIGATION_MENU_STATE;
+Menu_Type_t Menu_type = NAVIGATION_MENU_TYPE;
 // Menu functions
 void create_menu(Menu_Item_t* menu)
 {
 	Current_menu=menu;
 	first_menu=&NONE;
-	//HAL_UART_Transmit(&huart2,(uint8_t*)welcome_message, 47, 100);
-	print_menu();
+	Print_menu();
 }
 /*Receive type of event and handle it */
 uint8_t menu_handler(Event_Type_t ev_type){
@@ -43,11 +40,11 @@ uint8_t menu_handler(Event_Type_t ev_type){
 								Current_menu=Current_menu->child;
 								first_menu=&NONE;
 								menu_select_index=1;
-								print_menu();
+								Print_menu();
 								break;
 								}
 							else{
-								print_menu();
+								Print_menu();
 								break;
 							}
 					break;
@@ -56,10 +53,10 @@ uint8_t menu_handler(Event_Type_t ev_type){
 			case ESCAPE_EVENT:
 				if(Current_menu->parent==&NONE) return 0;
 				else{
-					menu_select_index=index_menu();
+					menu_select_index=1;
 					Current_menu=Current_menu->parent;
 					reload_menu();
-					print_menu();
+					Print_menu();
 				}
 				break;
 			case NEXT_EVENT:
@@ -67,7 +64,7 @@ uint8_t menu_handler(Event_Type_t ev_type){
 				else{
 					menu_select_index++;
 					Current_menu=Current_menu->next;
-					print_menu();
+					Print_menu();
 				}
 				break;
 			case PREV_EVENT:
@@ -75,7 +72,7 @@ uint8_t menu_handler(Event_Type_t ev_type){
 				else{
 					menu_select_index--;
 					Current_menu=Current_menu->prev;
-					print_menu();
+					Print_menu();
 				}
 				break;
 			case NONE_EVENT:
