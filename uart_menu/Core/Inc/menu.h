@@ -14,29 +14,18 @@
 /*The type of functions called from the menu */
 typedef uint8_t (*func_type)(void* p);
 
-typedef enum {
-	COMMAND_TYPE,
-	OPTION_TYPE
-} Item_Type_t;
-/*
-typedef enum{
-	NAVIGATION_MENU_STATE,
-	INPUT_MENU_STATE
-} Menu_State_t;
-*/
+
 typedef enum{
 	NAVIGATION_MENU_TYPE,
 	GPIO_MENU_TYPE
 } Menu_Type_t;
 
 typedef enum{
-	NONE_EVENT,
-	ENTER_EVENT,
-	ESCAPE_EVENT,
-	NEXT_EVENT,
-	PREV_EVENT,
-//	INC_EVENT,
-//	DEC_EVENT
+	NONE_MENU_EVENT,
+	ENTER_MENU_EVENT,
+	ESCAPE_MENU_EVENT,
+	NEXT_MENU_EVENT,
+	PREV_MENU_EVENT,
 } Event_Type_t;
 
 enum ASCII_TO_INT{
@@ -54,7 +43,6 @@ enum ASCII_TO_INT{
 };
 
 typedef const struct menu_item{
-	uint8_t type;
 	struct menu_item *prev;
 	struct menu_item *next;
 	struct menu_item *parent;
@@ -67,40 +55,42 @@ typedef const struct menu_item{
 extern  Menu_Item_t* Menu_first;
 extern  Menu_Item_t* Current_menu;
 extern  Menu_Item_t  NONE;
-extern  Menu_Type_t Menu_type;
-
+extern  Menu_Type_t  Menu_type;
 /* A macro for creating a menu item containing a function */
 #define MENU_COMMAND(_id, _name, _parent, _prev, _next , _func) \
-	extern Menu_Item_t _parent; 	\
-	extern Menu_Item_t _prev; 	\
-	extern Menu_Item_t _next;    \
-	Menu_Item_t _id = {.type = COMMAND_TYPE, .prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*)&_func, .name = _name}
-
-/* A macro for creating a menu item that does not contain a function*/
-#define MENU_OPTION(_id, _name, _parent, _child, _prev, _next) \
-	extern Menu_Item_t _parent; \
+	extern Menu_Item_t _parent;  \
 	extern Menu_Item_t _prev; 	 \
-	extern Menu_Item_t _next;   \
-	extern Menu_Item_t _child;   \
-	Menu_Item_t _id = {.type = OPTION_TYPE, .prev=(void*)&_prev, .next=(void*)&_next, .func=NULL, .parent=(void*)&_parent, .child=(void*)&_child, .name=_name}
+	extern Menu_Item_t _next;    \
+	Menu_Item_t _id = {.prev = (void*)&_prev, .next = (void*)&_next, .parent = (void*)&_parent, .func =(void*)&_func, .name = _name}
 
 //Functions prototypes
+void NULL_func();
+
 void create_menu(Menu_Item_t*);
-void Print_menu();
+
 void print_menu_string();
-void print_input_message(const char*);
-void reload_menu();
-void debug_output(uint32_t);
+void Print_input_message(const char*);
 
-uint8_t menu_handler(Event_Type_t);
-uint8_t flag_handler(uint16_t);
-uint8_t index_menu();
-uint8_t command_recieve();
-uint8_t lenstr(const char*);
+void Debug_output(int16_t);
 
-Event_Type_t menu_input_type();
+void Print_menu();
+void Reload_menu();
+void Back_menu();
+
+void int_to_str(int16_t);
+
 
 void GPIO();
 void GPIO_pin_select();
 void GPIO_pin_write();
+
+uint8_t command_recieve();
+
+uint8_t Index_menu();
+uint8_t Lenstr(const char*);
+
+uint8_t menu_handler(Event_Type_t);
+uint8_t flag_handler(uint16_t);
+
+Event_Type_t menu_input_type();
 #endif /* INC_MENU_H_ */

@@ -12,6 +12,8 @@
 #define ASCII_TO_INT(ASCII_value) ASCII_value-48
 //Functions prototypes
 
+extern void Print_menu_value(char*);
+
 void GPIO_port_convert(uint8_t);
 //uint8_t ASCII_to_int(uint8_t);
 

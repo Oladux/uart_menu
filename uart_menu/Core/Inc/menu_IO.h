@@ -9,5 +9,6 @@
 #define INC_MENU_IO_H_
 #include "menu.h"
 
-void print_status();
+void Print_menu_status();
+void Print_menu_value(int16_t);
 #endif /* INC_MENU_IO_H_ */

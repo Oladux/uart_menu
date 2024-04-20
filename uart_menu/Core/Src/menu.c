@@ -8,58 +8,49 @@
 
 extern Menu_Item_t MNav1;
 extern Menu_Item_t MGPIO1;
+extern uint8_t menu_item_index;
 
-// Variables
+/* Variables */
 char input_command[1]={" "};
 
 Menu_Item_t NONE = {0};
 Menu_Item_t* first_menu;
 Menu_Item_t* Current_menu = &NONE;
 
-uint8_t menu_select_index = 1;
 Menu_Type_t Menu_type = NAVIGATION_MENU_TYPE;
-// Menu functions
+
+uint8_t menu_select_index = 1;
+
+/* Menu functions */
 void create_menu(Menu_Item_t* menu)
 {
 	Current_menu=menu;
 	first_menu=&NONE;
 	Print_menu();
 }
-/*Receive type of event and handle it */
+/* Passed as function to menu without function */
+void NULL_func(){
+	menu_select_index=Index_menu();
+}
+/* Receive type of event and handle it */
 uint8_t menu_handler(Event_Type_t ev_type){
 	if((Current_menu==NULL)||(Current_menu == &NONE)) return 0;
 	else{
 		switch(ev_type){
-			case ENTER_EVENT:
-				switch (Current_menu->type) {
-					case (COMMAND_TYPE):
-							menu_select_index=1;
-							return Current_menu->func(0);
-					case (OPTION_TYPE):
-							if(((Current_menu->child)!=&NONE)){
-								Current_menu=Current_menu->child;
-								first_menu=&NONE;
-								menu_select_index=1;
-								Print_menu();
-								break;
-								}
-							else{
-								Print_menu();
-								break;
-							}
-					break;
-			}
+			case ENTER_MENU_EVENT:
+				menu_select_index=1;
+				return Current_menu->func(0);
 				break;
-			case ESCAPE_EVENT:
+			case ESCAPE_MENU_EVENT:
 				if(Current_menu->parent==&NONE) return 0;
 				else{
 					menu_select_index=1;
 					Current_menu=Current_menu->parent;
-					reload_menu();
+					Reload_menu();
 					Print_menu();
 				}
 				break;
-			case NEXT_EVENT:
+			case NEXT_MENU_EVENT:
 				if (Current_menu->next==&NONE) return 0;
 				else{
 					menu_select_index++;
@@ -67,7 +58,7 @@ uint8_t menu_handler(Event_Type_t ev_type){
 					Print_menu();
 				}
 				break;
-			case PREV_EVENT:
+			case PREV_MENU_EVENT:
 				if (Current_menu->prev==&NONE) return 0;
 				else{
 					menu_select_index--;
@@ -75,7 +66,7 @@ uint8_t menu_handler(Event_Type_t ev_type){
 					Print_menu();
 				}
 				break;
-			case NONE_EVENT:
+			case NONE_MENU_EVENT:
 			default:
 				break;
 		}
@@ -87,28 +78,32 @@ Event_Type_t menu_input_type(){
 	uint8_t command=command_recieve();
 	switch (command) {
 		case LEFT:
-			event = ESCAPE_EVENT;
+			event = ESCAPE_MENU_EVENT;
 			break;
 		case UP:
-			event = PREV_EVENT;
+			event = PREV_MENU_EVENT;
 			break;
 		case RIGHT:
-			event = ENTER_EVENT;
+			event = ENTER_MENU_EVENT;
 			break;
 		case DOWN:
-			event = NEXT_EVENT;
+			event = NEXT_MENU_EVENT;
 			break;
 		default:
-			event = NONE_EVENT;
+			event = NONE_MENU_EVENT;
 			break;
 	}
 	return event;
 }
-//Menu print functions
 
-//Common use functions
+/* Common use functions */
+/* Returns to the menu after executing the function */
+void Back_menu(){
+	menu_item_index=1;
+	menu_select_index=Index_menu();
+}
 /* Returns the index of the selected menu item */
-uint8_t index_menu(){
+uint8_t Index_menu(){
 	Menu_Item_t* buf_menu=Current_menu;
 	uint8_t index=1;
 	while(buf_menu->prev!=&NONE){
@@ -117,19 +112,14 @@ uint8_t index_menu(){
 	}
 	return index;
 }
+
 /* Reset the selected menu item index to the first one */
-void reload_menu(){
+void Reload_menu(){
 	while(Current_menu->prev!=&NONE){
 		Current_menu=Current_menu->prev;
 	}
 }
 
-uint8_t lenstr(const char* str)
-{
-    const char *s;
-    for (s = str; *s; ++s);
-    return(s - str);
-}
 
 
 

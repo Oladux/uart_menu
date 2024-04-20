@@ -7,23 +7,18 @@
 #include <menu.h>
 
 
-/* Structs templates
- * MENU_OPTION(id, name, parent, child, prev, next)
+/* Struct templates
  * MENU_COMMAND(id, name, parent, prev, next, func)
  * */
 /*All options*/
 MENU_COMMAND(MNav1,"GPIO", NONE, NONE,MNav2,GPIO);
-MENU_OPTION(MNav2,"TEST2",NONE,MNav12,MNav1, MNav3);
-MENU_OPTION(MNav3,"TEST3",NONE,MNav13,MNav2,NONE);
-//MENU_COMMAND(MNav11,"GPIO", MNav1, NONE,NONE,GPIO);
-//MENU_OPTION(mo11,"TEST4",mo1,NONE,NONE,NONE);
-MENU_COMMAND(MNav12,"TEST5", MNav2, NONE,NONE,NONE);
-MENU_OPTION(MNav13,"TEST6",MNav3,NONE,NONE,NONE);
+MENU_COMMAND(MNav2,"TEST2", NONE, MNav1,MNav3,NULL_func);
+MENU_COMMAND(MNav3,"TEST3", NONE, MNav2,NONE,NULL_func);
 
 /*GPIO options*/
 MENU_COMMAND(MGPIO1,"Choose GPIO pin",MNav1,NONE,MGPIO2,GPIO_pin_select);
 MENU_COMMAND(MGPIO2,"Write GPIO",MNav1,MGPIO1,MGPIO3,GPIO_pin_write);
-MENU_COMMAND(MGPIO3,"GPIO3",MNav1,MGPIO2,NONE,NONE);
+MENU_COMMAND(MGPIO3,"GPIO3",MNav1,MGPIO2,NONE,NULL_func);
 
 /*The entry point to the program*/
 void menu_app(){
