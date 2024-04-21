@@ -45,19 +45,22 @@ void Print_menu(){
 	menu_item_index = 1;
 }
 
-void print_menu_string(const char* string){
-	char str[2]="0";
-	snprintf(str,3,"%d)",menu_item_index);
+void print_menu_string(const char* print_string){
+	char str[3+Lenstr(print_string)];
+	snprintf(str,3+Lenstr(print_string),"%d)%s", menu_item_index, print_string);
 
-	HAL_UART_Transmit(&huart2, (uint8_t*)str, 2, 100);
-	HAL_UART_Transmit(&huart2, (uint8_t*)string, Lenstr(string), 100);
+	HAL_UART_Transmit(&huart2, (uint8_t*)str, Lenstr(str), 100);
 
 	if(menu_select_index == menu_item_index){
+
 		HAL_UART_Transmit(&huart2, (uint8_t*)"*", 1, 100);
+
 		if(print_value_flag){
 			int_to_str(menu_value_output);
-			HAL_UART_Transmit(&huart2, (uint8_t*)"     ", 5, 100);
-			HAL_UART_Transmit(&huart2, (uint8_t*)converted_str, Lenstr(converted_str), 100);
+
+			sprintf(str,"     %s",converted_str);
+			HAL_UART_Transmit(&huart2, (uint8_t*)str, Lenstr(str), 100);
+
 			print_value_flag = 0;
 		}
 	}
@@ -66,16 +69,19 @@ void print_menu_string(const char* string){
 
 /* Prints the status of current MENU_TYPE */
 void Print_menu_status(){
+	char str[60];
+	uint8_t GPIO_message_lenght=Lenstr(GPIO_str)+Lenstr(divide_message)+11;
+	uint8_t nav_message_lenght=Lenstr(welcome_message)+Lenstr(divide_message);
 	switch (Menu_type){
 		case NAVIGATION_MENU_TYPE:
-			HAL_UART_Transmit(&huart2, (uint8_t*)welcome_message, Lenstr(welcome_message), 100);
-			HAL_UART_Transmit(&huart2, (uint8_t*)divide_message, 21, 100);
+			snprintf(str,nav_message_lenght+2,"%s%s",welcome_message,divide_message);
+			HAL_UART_Transmit(&huart2, (uint8_t*)str, nav_message_lenght+1, 100);
 			break;
 		case GPIO_MENU_TYPE:
-			sprintf(GPIO_str,"P%c%d%c",chosen_port,chosen_pin,'\n');
-			HAL_UART_Transmit(&huart2, (uint8_t*)"Chosen pin:", 11, 100);
-			HAL_UART_Transmit(&huart2, (uint8_t*)GPIO_str, 4, 100);
-			HAL_UART_Transmit(&huart2, (uint8_t*)divide_message, 21, 100);
+			sprintf(GPIO_str,"P%c%d%s",chosen_port,chosen_pin,"\n");
+			snprintf(str,GPIO_message_lenght+2,"Chosen pin:%s%s",GPIO_str,divide_message);
+			HAL_UART_Transmit(&huart2, (uint8_t*)str, GPIO_message_lenght, 100);
+			break;
 	}
 }
 
@@ -83,9 +89,8 @@ void Print_menu_status(){
 void Print_input_message(const char* str){
 	uint8_t str_len= Lenstr(str)+2;
 	char string[str_len];
-	snprintf(string,str_len,"%s: ",str);
+	snprintf(string,str_len,"%s%c: ",str,'\n');
 	HAL_UART_Transmit(&huart2, (uint8_t*)string, str_len-1, 100);
-	HAL_UART_Transmit(&huart2, (uint8_t*)"\n", 1, 100);
 }
 /* Prints a current value of menu item */
 void Print_menu_value(int16_t status){
