@@ -7,6 +7,7 @@
 
 #ifndef INC_GPIO_H_
 #define INC_GPIO_H_
+#include <menu.h>
 #endif /* INC_GPIO_H_ */
 
 #define ASCII_TO_INT(ASCII_value) ASCII_value-48

@@ -4,7 +4,6 @@
  *  Created on: Mar 30, 2024
  *      Author: Stepan
  */
-#include <menu.h>
 #include "GPIO.h"
 
 extern Menu_Item_t MGPIO1;
@@ -23,9 +22,8 @@ char chosen_port='N'; uint8_t chosen_pin=0;
 
 /* The general GPIO function called from the menu */
 void GPIO(){
-	create_menu(&MGPIO1);
 	Menu_type=GPIO_MENU_TYPE;
-	Print_menu();
+	create_menu(&MGPIO1);
 }
 
 /* MGPIO1 */

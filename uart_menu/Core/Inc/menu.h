@@ -8,7 +8,7 @@
 #ifndef INC_MENU_H_
 #define INC_MENU_H_
 #include "main.h"
-#include "math.h"
+#include "menu_conf.h"
 
 
 /*The type of functions called from the menu */
