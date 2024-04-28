@@ -13,7 +13,7 @@ extern Menu_Item_t MGPIO1;
 GPIO_TypeDef* const GPIO_NONE= {0};
 GPIO_TypeDef* current_GPIO = GPIO_NONE;
 
-uint32_t pin_input=0;
+uint32_t GPIO_pin=0;
 uint32_t GPIO_command=0;
 uint8_t GPIO_write_state=0;
 char chosen_port='N'; uint8_t chosen_pin=0;
@@ -35,16 +35,54 @@ void GPIO_pin_write(){
 	GPIO_input(GPIO_PIN_WRITE);
 	if(GPIO_write_state != GPIO_PIN_RESET)
 	  {
-	    current_GPIO->BSRR = pin_input;
+	    current_GPIO->BSRR = GPIO_pin;
 	  }
 	else
 	  {
-		current_GPIO->BSRR = (uint32_t)pin_input << 16U;
+		current_GPIO->BSRR = (uint32_t)GPIO_pin << 16U;
 	  }
 	Print_menu_value(GPIO_write_state);
 	Back_menu();
 	Print_menu();
 }
+/* MGPIO3 */
+void GPIO_pin_init(){
+
+	static uint8_t init_status=0;
+
+	GPIO_InitTypeDef GPIO_init={0};
+	if(init_status){
+		 HAL_GPIO_DeInit(current_GPIO, GPIO_pin);
+
+		 init_status++;
+		 init_status%=2;
+
+		 Print_menu_value(init_status);
+		 Back_menu();
+		 Print_menu();
+	}
+	else{
+		__HAL_RCC_GPIOA_CLK_ENABLE();
+		__HAL_RCC_GPIOB_CLK_ENABLE();
+		__HAL_RCC_GPIOC_CLK_ENABLE();
+		__HAL_RCC_GPIOH_CLK_ENABLE();
+
+		HAL_GPIO_WritePin(current_GPIO, GPIO_pin, GPIO_PIN_RESET);
+		GPIO_init.Pin=GPIO_pin;
+		GPIO_init.Mode=GPIO_MODE_OUTPUT_PP;
+		GPIO_init.Pull=GPIO_NOPULL;
+
+		HAL_GPIO_Init(current_GPIO, &GPIO_init);
+
+		init_status++;
+		init_status%=2;
+
+		Print_menu_value(init_status);
+		Back_menu();
+		Print_menu();
+	}
+}
+
 
 /*GPIO input functions */
 
@@ -69,12 +107,12 @@ void GPIO_input(uint8_t GPIO_mode){
 void GPIO_pin_input(){
 	Print_input_message("Input GPIO pin");
 	GPIO_command = ASCII_TO_INT(command_recieve());
-	pin_input=GPIO_command;
-	chosen_pin=pin_input;
-	if ((pin_input <= 15) && ((pin_input > 0))){
-		pin_input=1<<pin_input;
+	GPIO_pin=GPIO_command;
+	chosen_pin=GPIO_pin;
+	if ((GPIO_pin <= 15) && ((GPIO_pin > 0))){
+		GPIO_pin=1<<GPIO_pin;
 	}
-	else {pin_input=0; chosen_pin=0;}
+	else {GPIO_pin=0; chosen_pin=0;}
 	/* Debug_output(pin_input); */
 }
 

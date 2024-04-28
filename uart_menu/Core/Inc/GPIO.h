@@ -25,6 +25,7 @@ void GPIO_input(uint8_t);
 void GPIO_pin_select();
 void GPIO_pin_write();
 void GPIO_pin_write_input();
+void GPIO_pin_init();
 
 enum GPIO_INPUT_MODE{
 	GPIO_PIN_SELECT,

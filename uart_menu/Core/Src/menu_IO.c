@@ -68,6 +68,7 @@ void print_menu_string(const char* print_string){
 	HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)"\n", 1, 100);
 }
 
+
 /* Prints the status of current MENU_TYPE */
 void Print_menu_status(){
 	char str[100];

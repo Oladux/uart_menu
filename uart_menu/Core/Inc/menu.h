@@ -83,6 +83,7 @@ void int_to_str(int16_t);
 void GPIO();
 void GPIO_pin_select();
 void GPIO_pin_write();
+void GPIO_pin_init();
 
 uint8_t command_recieve();
 
