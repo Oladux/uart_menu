@@ -19,7 +19,7 @@ MENU_COMMAND(MNav3,"NULL", NONE, MNav2,NONE,NULL_func);
 MENU_COMMAND(MGPIO1,"Choose GPIO pin",MNav1,NONE,MGPIO2,GPIO_pin_select);
 MENU_COMMAND(MGPIO2,"Write GPIO",MNav1,MGPIO1,MGPIO3,GPIO_pin_write);
 MENU_COMMAND(MGPIO3,"GPIO pin init",MNav1,MGPIO2,MGPIO4,GPIO_pin_init);
-MENU_COMMAND(MGPIO4,"NULL",MNav1,MGPIO3,NONE,NULL_func);
+MENU_COMMAND(MGPIO4,"GPIO pin speed",MNav1,MGPIO3,NONE,GPIO_pin_speed);
 
 /*The entry point to the program*/
 void menu_app(){

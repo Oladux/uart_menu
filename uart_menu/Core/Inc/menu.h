@@ -84,6 +84,7 @@ void GPIO();
 void GPIO_pin_select();
 void GPIO_pin_write();
 void GPIO_pin_init();
+void GPIO_pin_speed();
 
 uint8_t command_recieve();
 

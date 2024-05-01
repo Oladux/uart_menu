@@ -13,6 +13,8 @@ extern Menu_Item_t MGPIO1;
 GPIO_TypeDef* const GPIO_NONE= {0};
 GPIO_TypeDef* current_GPIO = GPIO_NONE;
 
+GPIO_InitTypeDef GPIO_init = {0};
+
 uint32_t GPIO_pin=0;
 uint32_t GPIO_command=0;
 uint8_t GPIO_write_state=0;
@@ -48,16 +50,16 @@ void GPIO_pin_write(){
 /* MGPIO3 */
 void GPIO_pin_init(){
 
-	static uint8_t init_status=0;
+	static uint8_t GPIO_init_status = 0;
 
-	GPIO_InitTypeDef GPIO_init={0};
-	if(init_status){
+	GPIO_InitTypeDef GPIO_init = {0};
+	if(GPIO_init_status){
 		 HAL_GPIO_DeInit(current_GPIO, GPIO_pin);
 
-		 init_status++;
-		 init_status%=2;
+		 GPIO_init_status++;
+		 GPIO_init_status %= 2;
 
-		 Print_menu_value(init_status);
+		 Print_menu_value(GPIO_init_status);
 		 Back_menu();
 		 Print_menu();
 	}
@@ -68,19 +70,32 @@ void GPIO_pin_init(){
 		__HAL_RCC_GPIOH_CLK_ENABLE();
 
 		HAL_GPIO_WritePin(current_GPIO, GPIO_pin, GPIO_PIN_RESET);
-		GPIO_init.Pin=GPIO_pin;
-		GPIO_init.Mode=GPIO_MODE_OUTPUT_PP;
-		GPIO_init.Pull=GPIO_NOPULL;
+		GPIO_init.Pin = GPIO_pin;
+		GPIO_init.Mode = GPIO_MODE_OUTPUT_PP;
+		GPIO_init.Pull = GPIO_NOPULL;
 
 		HAL_GPIO_Init(current_GPIO, &GPIO_init);
 
-		init_status++;
-		init_status%=2;
+		GPIO_init_status++;
+		GPIO_init_status %= 2;
 
-		Print_menu_value(init_status);
+		Print_menu_value(GPIO_init_status);
 		Back_menu();
 		Print_menu();
 	}
+}
+/*MGPIO4*/
+void GPIO_pin_speed(){
+	char* speed_messages[]={"Low","Medium","High","Very high"};
+	static uint8_t GPIO_speed_status = 0;
+	GPIO_speed_status++; GPIO_speed_status %= 4;
+
+	GPIO_init.Speed=GPIO_speed_status;
+	HAL_GPIO_Init(current_GPIO, &GPIO_init);
+
+	Print_menu_string(speed_messages[GPIO_speed_status]);
+	Back_menu();
+	Print_menu();
 }
 
 

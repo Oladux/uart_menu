@@ -19,12 +19,13 @@ extern char* converted_str;
 
 uint8_t menu_item_index = 1;
 uint8_t print_value_flag = 0;
+uint8_t print_string_flag = 0;
 uint32_t menu_status_output = 0, menu_value_output = 0;
 
 char* welcome_message="Welcome to UART menu. "
 					  "Use arrows to navigate.\n";
 char* divide_message = "--------------------\n";
-char GPIO_str[5] = "";
+char GPIO_pin_str[5] = "";
 char* menu_value_str = "";
 
 /*Menu I/O functions */
@@ -64,6 +65,13 @@ void print_menu_string(const char* print_string){
 
 			print_value_flag = 0;
 		}
+		if(print_string_flag){
+			sprintf(str,"     %s",menu_value_str);
+			HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)str, Lenstr(str), 100);
+
+			print_string_flag = 0;
+
+		}
 	}
 	HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)"\n", 1, 100);
 }
@@ -73,15 +81,15 @@ void print_menu_string(const char* print_string){
 void Print_menu_status(){
 	char str[100];
 	uint8_t nav_message_lenght=Lenstr(welcome_message)+Lenstr(divide_message);
-	uint8_t GPIO_message_lenght=Lenstr(GPIO_str)+Lenstr(divide_message)+14;
+	uint8_t GPIO_message_lenght=Lenstr(GPIO_pin_str)+Lenstr(divide_message)+14;
 	switch (Menu_type){
 		case NAVIGATION_MENU_TYPE:
 			snprintf(str,nav_message_lenght+2,"%s%s",welcome_message,divide_message);
 			HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)str, Lenstr(str), 100);
 			break;
 		case GPIO_MENU_TYPE:
-			sprintf(GPIO_str,"P%c%d%s",chosen_port,chosen_pin,"\n");
-			snprintf(str,GPIO_message_lenght+2,"Chosen pin:%s%s",GPIO_str,divide_message);
+			sprintf(GPIO_pin_str,"P%c%d%s",chosen_port,chosen_pin,"\n");
+			snprintf(str,GPIO_message_lenght+2,"Chosen pin:%s%s",GPIO_pin_str,divide_message);
 			HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)str, Lenstr(str), 100);
 			break;
 	}
@@ -94,11 +102,19 @@ void Print_input_message(const char* str){
 	snprintf(string,str_len,"%s%c: ",str,'\n');
 	HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)string, str_len-1, 100);
 }
-/* Prints a current value of menu item */
-void Print_menu_value(int16_t status){
+
+/* Prints a value of menu item */
+void Print_menu_value(int16_t value){
 	print_value_flag=1;
-	menu_value_output=status;
+	menu_value_output=value;
 }
+
+/* Prints a info string of menu item */
+void Print_menu_string(char* string){
+	print_string_flag=1;
+	menu_value_str=string;
+}
+
 
 uint8_t command_recieve(){
 	char input_command[1]={" "};
