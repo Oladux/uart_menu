@@ -4,8 +4,10 @@
  *  Created on: Mar 30, 2024
  *      Author: Stepan
  */
-#include "GPIO.h"
 
+
+#include "GPIO.h"
+#ifdef GPIO_MENU_MODULE_ENABLE
 extern Menu_Item_t MGPIO1;
 
 /* Variables */
@@ -174,3 +176,4 @@ void GPIO_port_convert(uint8_t input){
 			break;
 	}
 }
+#endif

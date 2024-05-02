@@ -65,6 +65,7 @@ void print_menu_string(const char* print_string){
 
 			print_value_flag = 0;
 		}
+
 		if(print_string_flag){
 			sprintf(str,"     %s",menu_value_str);
 			HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)str, Lenstr(str), 100);
@@ -87,11 +88,13 @@ void Print_menu_status(){
 			snprintf(str,nav_message_lenght+2,"%s%s",welcome_message,divide_message);
 			HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)str, Lenstr(str), 100);
 			break;
+#ifdef GPIO_MENU_MODULE_ENABLE
 		case GPIO_MENU_TYPE:
 			sprintf(GPIO_pin_str,"P%c%d%s",chosen_port,chosen_pin,"\n");
 			snprintf(str,GPIO_message_lenght+2,"Chosen pin:%s%s",GPIO_pin_str,divide_message);
 			HAL_UART_Transmit(&CHOSEN_UART, (uint8_t*)str, Lenstr(str), 100);
 			break;
+#endif
 	}
 }
 

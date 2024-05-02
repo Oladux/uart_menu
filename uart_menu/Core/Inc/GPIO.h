@@ -10,9 +10,10 @@
 #include <menu.h>
 #endif /* INC_GPIO_H_ */
 
+#ifdef GPIO_MENU_MODULE_ENABLE
 #define ASCII_TO_INT(ASCII_value) ASCII_value-48
-//Functions prototypes
 
+//Functions prototypes
 extern void Print_menu_value(char*);
 
 void GPIO_port_convert(uint8_t);
@@ -31,4 +32,4 @@ enum GPIO_INPUT_MODE{
 	GPIO_PIN_SELECT,
 	GPIO_PIN_WRITE,
 };
-
+#endif
